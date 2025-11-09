@@ -1,12 +1,12 @@
 // Service Worker for Guria Guide PWA
 const CACHE_NAME = 'guria-guide-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/map.html',
-  '/src/style.css',
-  '/src/scrpt.js',
-  '/kacuna/guide.jpeg',
+  './',
+  './index.html',
+  './map.html',
+  './src/style.css',
+  './src/scrpt.js',
+  './kacuna/guide.jpeg',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
 ];
@@ -73,7 +73,7 @@ self.addEventListener('fetch', (event) => {
         }).catch(() => {
           // If fetch fails, return offline page for navigation requests
           if (event.request.mode === 'navigate') {
-            return caches.match('/index.html');
+            return caches.match('./index.html');
           }
         });
       })

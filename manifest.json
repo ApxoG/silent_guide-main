@@ -2,7 +2,7 @@
   "name": "Guria QR Audio Guide",
   "short_name": "Guria Guide",
   "description": "Interactive audio guide for Guria region with geolocation tracking",
-  "start_url": "/index.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#0984e3",
@@ -64,7 +64,7 @@
       "name": "Map",
       "short_name": "Map",
       "description": "Open map view",
-      "url": "/map.html",
+      "url": "./map.html",
       "icons": [{ "src": "icons/icon-96x96.png", "sizes": "96x96" }]
     }
   ]
