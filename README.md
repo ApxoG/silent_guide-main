@@ -65,8 +65,25 @@ See `MOBILE_SETUP.md` for Capacitor setup instructions to build for iOS and Andr
 
 ## 🌐 Deployment
 
+### GitHub Pages (Automated)
+
+This repository is configured to automatically deploy to GitHub Pages:
+
+1. **Enable GitHub Pages**:
+   - Go to repository Settings → Pages
+   - Under "Source", select "GitHub Actions"
+
+2. **Automatic Deployment**:
+   - Push to the `main` branch triggers automatic deployment
+   - The GitHub Actions workflow builds and deploys the site
+   - Access your site at: `https://<username>.github.io/<repository-name>/`
+
+3. **Manual Deployment**:
+   - Go to Actions tab → "Deploy to GitHub Pages" → Run workflow
+
+### Other Hosting Options
+
 Deploy to any static hosting:
-- GitHub Pages
 - Netlify
 - Vercel
 - Firebase Hosting
