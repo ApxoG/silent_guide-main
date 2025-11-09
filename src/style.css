@@ -1,0 +1,332 @@
+/* Splash / loading screen styles (mobile-first) */
+.splash {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+.splash-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.6);
+}
+.splash-overlay {
+  position: relative;
+  z-index: 1000;
+  text-align: center;
+  color: #fff;
+  padding: 20px;
+}
+.splash-title {
+  font-size: 20px;
+  margin-bottom: 18px;
+}
+.lang-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.lang-btn {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.18);
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 16px;
+  min-width: 92px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.lang-btn:active { transform: scale(0.98); }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #74b9ff, #0984e3);
+  overflow: hidden;
+}
+      #map {
+        height: 100vh;
+        width: 100vw;
+      }
+      .leaflet-popup-content-wrapper {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        max-width: 300px;
+      }
+      .leaflet-popup-content {
+        margin: 10px;
+        font-size: 14px;
+        color: #333;
+      }
+      .robot-marker {
+        width: 50px;
+        height: 50px;
+        background-size: cover;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+      #continue-btn {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #0984e3;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        font-size: 16px;
+        border-radius: 25px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        transition: background 0.3s;
+      }
+      #continue-btn:hover {
+        background: #0652a0;
+      }
+      #langSwitch {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: #00b894;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        font-size: 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        z-index: 1000;
+      }
+      #chat-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 300px;
+        max-height: 400px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        display: none;
+        flex-direction: column;
+        z-index: 1000;
+        overflow: hidden;
+      }
+      #chat-header {
+        background: #0984e3;
+        color: white;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+      }
+      #chat-header h4 {
+        margin: 0;
+      }
+      #chat-close {
+        cursor: pointer;
+        font-size: 18px;
+      }
+      #chat-messages {
+        padding: 10px;
+        overflow-y: auto;
+        flex: 1;
+      }
+      .message {
+        background: #f1f1f1;
+        margin: 5px 0;
+        padding: 8px;
+        border-radius: 10px;
+        font-size: 14px;
+      }
+      .message strong {
+        color: #0984e3;
+      }
+      .sight-link {
+        color: #0652a0;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      #chat-toggle {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        background: #0984e3;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      /* simple header shown on map.html */
+      .map-header {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        right: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 1200;
+        pointer-events: none;
+      }
+      .back-btn {
+        pointer-events: all;
+        background: rgba(255,255,255,0.9);
+        border: none;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 18px;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+        min-width: 44px;
+        min-height: 44px;
+      }
+      .lang-label {
+        pointer-events: all;
+        background: rgba(0,0,0,0.5);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 8px;
+        margin-left: 6px;
+        font-weight: 600;
+        user-select: none;
+      }
+      .lang-label:hover {
+        background: rgba(0,0,0,0.7);
+      }
+      /* Suggestions Panel */
+      .suggestions-panel {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+        width: auto;
+        max-width: 400px;
+        max-height: 400px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+      @media (min-width: 768px) {
+        .suggestions-panel {
+          width: 320px;
+          right: auto;
+        }
+      }
+      .suggestions-panel.collapsed {
+        max-height: 50px;
+      }
+      .suggestions-header {
+        background: linear-gradient(135deg, #0984e3, #00b894);
+        color: white;
+        padding: 12px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+      }
+      .suggestions-header h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+      }
+      .suggestions-toggle {
+        background: rgba(255,255,255,0.2);
+        border: none;
+        color: white;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .suggestions-content {
+        padding: 12px;
+        overflow-y: auto;
+        flex: 1;
+        max-height: 350px;
+      }
+      .suggestions-panel.collapsed .suggestions-content {
+        display: none;
+      }
+      .suggestions-loading {
+        text-align: center;
+        color: #666;
+        padding: 20px;
+        font-size: 14px;
+      }
+      .suggestion-category {
+        margin-bottom: 16px;
+      }
+      .suggestion-category-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .suggestion-item {
+        background: #f8f9fa;
+        border-left: 3px solid #0984e3;
+        padding: 10px;
+        margin-bottom: 8px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .suggestion-item:hover {
+        background: #e9ecef;
+        transform: translateX(4px);
+      }
+      .suggestion-item.restaurant {
+        border-left-color: #e17055;
+      }
+      .suggestion-item.museum {
+        border-left-color: #0984e3;
+      }
+      .suggestion-item.sightseeing {
+        border-left-color: #00b894;
+      }
+      .suggestion-item-name {
+        font-weight: 600;
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 4px;
+      }
+      .suggestion-item-desc {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 4px;
+      }
+      .suggestion-item-distance {
+        font-size: 11px;
+        color: #0984e3;
+        font-weight: 500;
+      }

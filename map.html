@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="description" content="Interactive map guide for Guria region" />
+    <meta name="theme-color" content="#0984e3" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Guria Guide" />
+    <title>Map - Guria Guide</title>
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="apple-touch-icon" href="./icons/icon-192x192.png" />
+    <link rel="stylesheet" href="./src/style.css" />
+    <!-- Add Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  </head>
+  <body>
+    <div class="map-header">
+      <button id="back-btn" class="back-btn">◀</button>
+      <div id="lang-label" class="lang-label">Map</div>
+    </div>
+    <div id="map"></div>
+    
+    <!-- Suggestions Panel -->
+    <div id="suggestions-panel" class="suggestions-panel">
+      <div class="suggestions-header">
+        <h3 id="suggestions-title">Guide Suggestions</h3>
+        <button id="suggestions-toggle" class="suggestions-toggle">▼</button>
+      </div>
+      <div id="suggestions-content" class="suggestions-content">
+        <div id="suggestions-loading" class="suggestions-loading">Finding nearby places...</div>
+        <div id="suggestions-list"></div>
+      </div>
+    </div>
+
+    <!-- Remove Google Maps API script -->
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE&callback=initMap" async defer></script> -->
+    <!-- Add Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="./src/scrpt.js"></script>
+    <script>
+      // small helper to show chosen language in header
+      const params = new URLSearchParams(location.search);
+      const lang = params.get('lang') || 'en';
+      const names = { en: 'English', ru: 'Русский', ge: 'ქართული' };
+      const label = document.getElementById('lang-label');
+      if (label) label.textContent = names[lang] || lang;
+      const back = document.getElementById('back-btn');
+      back.addEventListener('click', () => history.back());
+    </script>
+    <script>
+      // Register service worker for PWA
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
+  </body>
+</html>

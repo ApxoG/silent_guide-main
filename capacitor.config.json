@@ -1,0 +1,26 @@
+{
+  "appId": "com.guriaguide.app",
+  "appName": "Guria Guide",
+  "webDir": ".",
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "http://localhost:8000",
+    "cleartext": true
+  },
+  "plugins": {
+    "Geolocation": {
+      "permissions": {
+        "location": "always"
+      }
+    }
+  },
+  "ios": {
+    "contentInset": "automatic"
+  },
+  "android": {
+    "allowMixedContent": true,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": true
+  }
+}
+

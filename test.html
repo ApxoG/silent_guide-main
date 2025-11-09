@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guria QR Audio Guide</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+body { margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #74b9ff, #0984e3); overflow: hidden; }
+#map { height: 100vh; width: 100vw; }
+.leaflet-popup-content-wrapper { background: rgba(255, 255, 255, 0.95); border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); max-width: 300px; }
+.leaflet-popup-content { margin: 10px; font-size: 14px; color: #333; }
+.robot-marker { width: 50px; height: 50px; background-size: cover; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+#continue-btn { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: #0984e3; color: white; border: none; padding: 12px 20px; font-size: 16px; border-radius: 25px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); z-index: 1000; transition: background 0.3s; }
+#continue-btn:hover { background: #0652a0; }
+#langSwitch { position: absolute; top: 20px; right: 20px; background: #00b894; color: white; border: none; padding: 10px 15px; font-size: 14px; border-radius: 8px; cursor: pointer; z-index: 1000; }
+#chat-container { position: fixed; bottom: 20px; right: 20px; width: 300px; max-height: 400px; background: white; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: none; flex-direction: column; z-index: 1000; overflow: hidden; }
+#chat-header { background: #0984e3; color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+#chat-header h4 { margin: 0; }
+#chat-close { cursor: pointer; font-size: 18px; }
+#chat-messages { padding: 10px; overflow-y: auto; flex: 1; }
+.message { background: #f1f1f1; margin: 5px 0; padding: 8px; border-radius: 10px; font-size: 14px; }
+.message strong { color: #0984e3; }
+.sight-link { color: #0652a0; text-decoration: underline; cursor: pointer; }
+#chat-toggle { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: #0984e3; color: white; border: none; border-radius: 50%; font-size: 24px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); z-index: 999; display: flex; align-items: center; justify-content: center; }
+</style>
+</head>
+<body>
+<button id="continue-btn" data-ge="გავაგრძელოთ გზა" data-en="Continue the journey" data-ru="Продолжить путь">გავაგრძელოთ გზა</button>
+<button id="langSwitch" data-ge="ენა" data-en="Language" data-ru="Язык">ენა</button>
+<div id="map"></div>
+<button id="chat-toggle">💬</button>
+<div id="chat-container">
+<div id="chat-header" data-ge="სიახლეები მოგზაურობიდან" data-en="Travel News" data-ru="Новости путешествий">
+<h4>სიახლეები მოგზაურობიდან</h4>
+<span id="chat-close">✕</span>
+</div>
+<div id="chat-messages"></div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.animatedmarker@1.0.0/src/AnimatedMarker.js"></script>
+<script>
+const map = L.map('map').setView([42.0, 42.2], 14);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors' }).addTo(map);
+
+const guideIcon = L.divIcon({
+className: 'robot-marker',
+iconSize: [50, 50],
+iconAnchor: [25, 50],
+html: `<img src="kacuna/guide.jpeg" style="width:100%; height:100%; border-radius:50%;">`
+});
+const guideMarker = L.marker([42.0, 42.2], { icon: guideIcon }).addTo(map);
+
+const towns = [
+{ name:{ge:'ჩოხატაური', en:'Chokhatauri', ru:'Чохатаури'}, lat:42.0, lng:42.2, sights:[
+{ name:{ge:'ბახმარო', en:'Bakhmaro', ru:'Бахмаро'}, desc:{ge:'ექსტრემალური ტურიზმი: ლაშქრობა, ჯომარდობა, ოფროუდი.', en:'Extreme tourism: hiking, rafting, off-road.', ru:'Экстремальный туризм: походы, рафтинг, бездорожье.'}, lat:42.002, lng:42.202, link:'bakhmaro.html' },
+{ name:{ge:'ჩხაჯოურის ჩანჩქერი', en:'Chkhajouri Waterfall', ru:'Водопад Чхаджури'}, desc:{ge:'ტყეები და ბილიკები.', en:'Forests and trails.', ru:'Леса и тропы.'}, lat:42.005, lng:42.205, link:'kintrishi.html' },
+{ name:{ge:'ჩოხატაურის მხარეთმცოდნეობის მუზეუმი', en:'Chokhatauri Local Lore Museum', ru:'Музей краеведения Чохатаури'}, desc:{ge:'არქეოლოგიური ნივთები.', en:'Archaeological artifacts.', ru:'Археологические артефакты.'}, lat:42.003, lng:42.203, link:'chokhatauri_museum.html' },
+{ name:{ge:'ნოდარ დუმბაძის სახლ-მუზეუმი', en:'Nodar Dumbadze House Museum', ru:'Дом-музей Нодара Думбадзе'}, desc:{ge:'მწერლის ისტორია და ნივთები.', en:'The writer’s history and belongings.', ru:'История писателя и его вещи.'}, lat:42.001, lng:42.199, link:'kintrishi_waterfall.html' }
+]}
+];
+
+let currentTownIndex=0;
+let currentLang=0;
+const langs=['ge','en','ru'];
+
+towns.forEach(town=>{
+town.sights.forEach(sight=>{
+const marker=L.marker([sight.lat,sight.lng]).addTo(map);
+marker.bindPopup(`<h3>${sight.name.ge}</h3><p>${sight.desc.ge}</p>`);
+sight.marker=marker;
+});
+});
+
+function updateChat(town,lang){
+const messagesDiv=document.getElementById('chat-messages');
+messagesDiv.innerHTML='';
+const greet={ge:`მოგესალმებით ${town.name.ge}-ში! აქ არის ღირსშესანიშნაობები:`,en:`Welcome to ${town.name.en}! Here are the sights:`,ru:`Добро пожаловать в ${town.name.ru}! Вот достопримечательности:`};
+messagesDiv.innerHTML+=`<div class="message"><strong>გიდი:</strong> ${greet[lang]}</div>`;
+town.sights.forEach(sight=>{
+const desc=sight.desc[lang];
+const name=sight.name[lang];
+const linkText={ge:'ნახვა რუკაზე',en:'View on map',ru:'Посмотреть на карте'}[lang];
+messagesDiv.innerHTML+=`<div class="message"><strong>${name}:</strong> ${desc} <a href="${sight.link}" target="_blank" class="sight-link">${linkText}</a></div>`;
+});
+messagesDiv.scrollTop=messagesDiv.scrollHeight;
+town.sights.forEach(sight=>{
+sight.marker.setPopupContent(`<h3>${sight.name[lang]}</h3><p>${sight.desc[lang]}</p>`);
+});
+}
+
+function updateUI(lang){
+const continueBtn=document.getElementById('continue-btn');
+const langBtn=document.getElementById('langSwitch');
+const header=document.getElementById('chat-header');
+continueBtn.textContent=continueBtn.getAttribute('data-'+lang);
+langBtn.textContent=langBtn.getAttribute('data-'+lang);
+header.querySelector('h4').textContent=header.getAttribute('data-'+lang);
+}
+
+document.getElementById('continue-btn').addEventListener('click',()=>{
+currentTownIndex=(currentTownIndex+1)%towns.length;
+const town=towns[currentTownIndex];
+map.flyTo([town.lat,town.lng],14,{duration:2});
+guideMarker.setLatLng([town.lat,town.lng]);
+updateChat(town,langs[currentLang]);
+document.getElementById('chat-container').style.display='flex';
+});
+
+document.getElementById('chat-toggle').addEventListener('click',()=>{
+const chat=document.getElementById('chat-container');
+chat.style.display=chat.style.display==='flex'?'none':'flex';
+});
+
+document.getElementById('chat-close').addEventListener('click',()=>{
+document.getElementById('chat-container').style.display='none';
+});
+
+document.getElementById('langSwitch').addEventListener('click',()=>{
+currentLang=(currentLang+1)%langs.length;
+const lang=langs[currentLang];
+updateUI(lang);
+updateChat(towns[currentTownIndex],lang);
+});
+
+updateUI('ge');
+updateChat(towns[0],'ge');
+</script>
+</body>
+</html>
